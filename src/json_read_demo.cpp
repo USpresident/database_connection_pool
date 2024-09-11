@@ -16,6 +16,8 @@ void ReadJson()
     Reader rd;
     Value root;
     rd.parse(inFile, root);
+    inFile.close();
+
     for (int i = 0; i < root.size(); ++i) {
         Value item = root[i];
         if (item.isInt()) {
