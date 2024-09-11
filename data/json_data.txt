@@ -1,0 +1,11 @@
+[
+    "liuchao",
+    27,
+    161,
+    true,
+    ["book","music"],
+    {
+        "sex":"man",
+        "son":"yichen"
+    }
+]
