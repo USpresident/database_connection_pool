@@ -59,7 +59,8 @@ std::shared_ptr<MySqlConn> ConnectionPool::GetConnetion()
     // 操作完数据库要还回给队列, 通过智能指针实现地址回收，而不是释放
     std::shared_ptr<MySqlConn> sharePtr(m_connQ.front(),
         [this](MySqlConn *conn) {
-            std::unique_lock<std::mutex> lock(m_mtxQ);
+            // std::unique_lock<std::mutex> lock(m_mtxQ);
+            std::lock_guard<std::mutex> lock(m_mtxQ);
             conn->RefreshAvailTime();
             m_connQ.push(conn);
         }
@@ -115,6 +116,7 @@ void ConnectionPool::ProduceConn()
     while (true) {
         std::unique_lock<std::mutex> lock(m_mtxQ);
         while (m_connQ.size() >= m_minSize) {
+            std::cout << "ProduceConn wait ........." << std::endl;
             m_cond.wait(lock); // 阻塞不消耗CPU资源
         }
 
@@ -126,16 +128,17 @@ void ConnectionPool::ProduceConn()
 void ConnectionPool::RecycleConn()
 {
     while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        std::unique_lock<std::mutex> lock(m_mtxQ);
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        // std::unique_lock<std::mutex> lock(m_mtxQ);
+        std::lock_guard<std::mutex> lock(m_mtxQ);
         while (m_connQ.size() > m_minSize) {
             MySqlConn *conn = m_connQ.front();
-            if (conn->GetAvailTime() > m_maxIdleTime) { // 入队后等待时间没有超过最大空闲时间
+            if (conn->GetAvailTime() <= m_maxIdleTime) { // 入队后等待时间没有超过最大空闲时间
                 break;
             }
 
             m_connQ.pop();
-            delete conn;            
+            delete conn;
         }
     }
 }

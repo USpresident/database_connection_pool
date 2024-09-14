@@ -63,12 +63,28 @@ void OptWithConnPool(int start, int end)
 
 void OneThreadWithoutConnPool(int start, int end)
 {
+    using namespace std::chrono;
+    steady_clock::time_point before = steady_clock::now();
     OptWithoutConnPool(start, end);
+    steady_clock::time_point after = steady_clock::now();
+
+    std::cout << "One thread without conn pool: ";
+    std::cout << (after - before).count() << "ns, "
+        << (after - before).count() / 1000000 << "ms ." << std::endl;
 }
 
 void OneThreadWithConnPool(int start, int end)
 {
+    using namespace std::chrono;
+    steady_clock::time_point before = steady_clock::now();
     OptWithConnPool(start, end);
+    steady_clock::time_point after = steady_clock::now();
+
+    auto len = (after - before);
+
+    std::cout << "One thread with conn pool: ";
+    std::cout << len.count() << "ns, "
+        << len.count() / 1000000 << "ms ." << std::endl;
 }
 
 void MultiThreadWithoutConnPool(int start, int end)

@@ -7,8 +7,8 @@ int main()
     // OneThreadWithoutConnPool(0, 10);
     OneThreadWithConnPool(0, 10);
 
-    MultiThreadWithoutConnPool(0, 10);
-    MultiThreadWithConnPool(0, 10);
+    // MultiThreadWithoutConnPool(0, 10);
+    // MultiThreadWithConnPool(0, 10);
 
     return 0;
 }
