@@ -17,7 +17,7 @@ MySqlConn::~MySqlConn()
 }
 
 bool MySqlConn::Connect(std::string user, std::string pwd,
-    std::string dbName, std::string ip, unsigned short port = 3306)
+    std::string dbName, std::string ip, unsigned short port)
 {
     return (mysql_real_connect(m_conn, ip.c_str(), user.c_str(), pwd.c_str(),
         dbName.c_str(), port, nullptr, 0) != nullptr);
@@ -36,8 +36,10 @@ bool MySqlConn::Query(std::string sql)
         return false;
     }
 
-    m_result = mysql_store_result(m_conn); // null 可返回 false
-    return true;
+    m_result = mysql_store_result(m_conn);
+    // 设置该成员可减少调用次数 mysql_num_fields
+    m_rowCount = (m_result != nullptr) ? mysql_num_fields(m_result) : 0;
+    return true; // return (m_result != nullptr);
 }
 
 bool MySqlConn::Next()
@@ -47,13 +49,12 @@ bool MySqlConn::Next()
     }
 
     m_row = mysql_fetch_row(m_result);
-    return true;
+    return (m_row != nullptr);
 }
 
 std::string MySqlConn::Value(int index)
 {
-    int rowCount = mysql_num_fields(m_result);
-    if ((index < 0) || (index >= rowCount)) {
+    if ((index < 0) || (index >= m_rowCount)) {
         return std::string();
     }
 
@@ -82,6 +83,7 @@ void MySqlConn::FreeResult()
     if (m_result != 0) {
         mysql_free_result(m_result);
         m_result = nullptr;
+        m_row = nullptr;
     }
 }
 

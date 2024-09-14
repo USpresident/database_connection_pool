@@ -35,6 +35,8 @@ private:
     MYSQL_RES *m_result{nullptr};
     MYSQL_ROW m_row{nullptr};
 
+    int m_rowCount;
+
     std::chrono::steady_clock::time_point m_availTime;
 };
 

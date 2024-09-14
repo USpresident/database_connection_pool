@@ -4,6 +4,7 @@
 #include <cppconn/statement.h>
 #include <cppconn/resultset.h>
 
+// ubuntu环境的mysql dev库变更，头文件删除了，本地暂时不支持运行
 int main() {
     try {
         sql::mysql::MySQL_Driver *driver;      // MySQL 驱动
