@@ -1,15 +1,14 @@
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include_json)
-include_directories(/usr/include/mysql)
 
 # aux_source_directory(. SUB_SRC)
-set(SUB_SRC MysqlConn.cpp ConnectionPool.cpp Mysql_pool_demo.cpp)
+set(SUB_SRC MysqlConn.cpp ConnectionPool.cpp)
 
-add_executable(conn_pool ${SUB_SRC})
+# 依赖了静态库，不能构建SHARED
+add_library(dbCconnPool ${SUB_SRC})
 
 # 添加依赖库目录 libjsoncpp.a，最好不使用 link_directories
-target_link_directories(conn_pool PUBLIC ${PROJECT_SOURCE_DIR}/lib)
+target_link_directories(dbCconnPool PUBLIC ${PROJECT_SOURCE_DIR}/lib_json)
 
-# 加依赖库, 去头去尾 libjsoncpp.a --> jsoncpp
-target_link_libraries(conn_pool jsoncpp)
-target_link_libraries(conn_pool mysqlclient)
+target_link_libraries(dbCconnPool jsoncpp)
+target_link_libraries(dbCconnPool mysqlclient)

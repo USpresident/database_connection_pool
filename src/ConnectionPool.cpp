@@ -3,6 +3,8 @@
 #include <fstream>
 #include <thread>
 
+#include <iostream>
+
 ConnectionPool &ConnectionPool::GetInstance()
 {
     // instance访问范围是当前函数，生命周期到应用程序结束

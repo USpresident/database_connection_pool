@@ -4,7 +4,7 @@
     "userName":"langzhong",
     "password":"Liuchao@1234",
     "dbName":"school",
-    "minSize":100,
+    "minSize":2,
     "maxSize":1024,
     "maxIdleTime":5000,
     "timeout":1000
