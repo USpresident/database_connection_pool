@@ -113,7 +113,7 @@ void ConnectionPool::ProduceConn()
 {
     while (true) {
         std::unique_lock<std::mutex> lock(m_mtxQ);
-        while (m_connQ.size() >= m_minSize) {
+        while (m_connQ.size() >= m_maxSize) {
             m_cond.wait(lock); // 阻塞不消耗CPU资源
         }
 
