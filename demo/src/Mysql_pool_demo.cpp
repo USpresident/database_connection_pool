@@ -4,11 +4,11 @@ int main()
 {
     // MysqlConn_fun();
 
-    // OneThreadWithoutConnPool(0, 10);
-    OneThreadWithConnPool(0, 10);
+    OneThreadWithoutConnPool(0, 1000);   // time_cost: 67710851886ns, 67710ms
+    OneThreadWithConnPool(0, 1000);      // time_cost: 2313295485ns, 2313ms
 
-    // MultiThreadWithoutConnPool(0, 10);
-    // MultiThreadWithConnPool(0, 10);
+    MultiThreadWithoutConnPool(0, 1000); // time_cost: 28945063455ns, 28945ms
+    MultiThreadWithConnPool(0, 1000);    // time_cost: 1241058639ns, 1241ms
 
     return 0;
 }

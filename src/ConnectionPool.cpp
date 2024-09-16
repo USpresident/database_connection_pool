@@ -3,8 +3,6 @@
 #include <fstream>
 #include <thread>
 
-#include <iostream>
-
 ConnectionPool &ConnectionPool::GetInstance()
 {
     // instance访问范围是当前函数，生命周期到应用程序结束
@@ -116,7 +114,6 @@ void ConnectionPool::ProduceConn()
     while (true) {
         std::unique_lock<std::mutex> lock(m_mtxQ);
         while (m_connQ.size() >= m_minSize) {
-            std::cout << "ProduceConn wait ........." << std::endl;
             m_cond.wait(lock); // 阻塞不消耗CPU资源
         }
 
